@@ -3,8 +3,6 @@ let configs = (function () {
 
   // Authentication and channels
   const channel = ''; // your channel
-  const username = ''; // bot account
-  const oauth = ''; // should be oauth:xxxxxxxxxxxx from the bot account
 
   // Styling - required
   const height = '150px';
@@ -89,8 +87,6 @@ let configs = (function () {
 
   const user = {
     channel,
-    username,
-    oauth,
   };
 
   const responses = {

@@ -7,22 +7,52 @@ const chatHandler = (function () {
   const responses = configs.responses;
   const isTesting = configs.settings.runTests;
 
-  let targetGlobal;
+  const client = streamerbot.client;
 
-  const opts = {
-    identity: {
-      username: user.username,
-      password: user.oauth,
-    },
-    channels: [user.channel],
-  };
+  client.on('Twitch.ChatMessage', onTwitchChatHandler);
 
-  const client = new tmi.client(opts);
+  function onTwitchChatHandler(data) {
+    const payload = data.data;
 
-  client.on('message', onMessageHandler);
-  client.on('connected', onConnectedHandler);
+    console.log(payload);
 
-  client.connect();
+		const command = payload.message.message.split(" ")[0];
+		const chatterName = payload.message.displayName;
+		const message = payload.message.message.split(" ").slice(1).join(" ");
+
+    const firstParam = message.split(" ")[0];
+    const secondParam = message.split(" ")[1];
+
+    // get is broadcaster (streamer) or moderator
+		const badges = payload.message.badges;
+
+    let isBroadCaster = false;
+    let isMod = false;
+
+		badges.forEach((badge) => {
+			if (badge.name === "broadcaster") {
+				isBroadCaster = true;
+			} else if (badge.name === "moderator") {
+				isMod = true;
+			}
+		});
+
+    const msg = {
+      command,
+      firstParam,
+      secondParam
+    };
+
+    const context = {
+      isMod,
+      isBroadCaster,
+      chatterName
+    }
+
+    console.log(msg, context);
+
+    messageHandler(context, msg);
+  }
 
   /**
    * Messages from chat pass through this function to detect when the timer command is used.
@@ -30,19 +60,17 @@ const chatHandler = (function () {
    * @param target - the channel were the message came from
    * @param {JSON} context - Additional information about the message and its sender
    * @param {String} msg - The message sent in chat
-   * @param {Boolean} self - whether it was a message from the logged in account itself
    * @note This function was taken from twitch documentation: https://dev.twitch.tv/docs/irc
    */
-  function onMessageHandler(target, context, msg, self) {
-    if (!msg || self) return;
+  function messageHandler(context, msg) {
+    if (!msg) return;
 
-    targetGlobal = target;
-
-    const { command, firstParam, secondParam } = extractMsgParams(msg);
+    const { command, firstParam, secondParam } = msg;
 
     if (command !== '!timer' && command !== '!start') return;
 
-    const { isMod, isBroadCaster, chatterName } = extractMsgInfo(context);
+    const { isMod, isBroadCaster, chatterName } = context;
+    console.log(isBroadCaster, isMod, chatterName);
 
     if (!(isMod || isBroadCaster)) {
       chatItalicMessage(responses.notMod, chatterName);
@@ -106,47 +134,6 @@ const chatHandler = (function () {
   }
 
   /**
-   * Extracts information about the sender of the message
-   * @param context - obj with user info from tmi.js
-   * @return {{isMod: bool, isBroadCaster: bool, chatterName: string}}
-   */
-  function extractMsgInfo(context) {
-    const isMod = context.mod;
-    const isBroadCaster =
-      context['badges-raw'] != null &&
-      context['badges-raw'].startsWith('broadcaster');
-    const chatterName = context['display-name']?.toLowerCase();
-
-    return {
-      isMod,
-      isBroadCaster,
-      chatterName,
-    };
-  }
-
-  /**
-   * Extracts information from chat messages
-   * @param msg - message from chat
-   * @return {{command: string, firstParam: string, secondParam: string}}
-   */
-  function extractMsgParams(msg) {
-    let messageSplit = msg.split(' ');
-    const length = messageSplit.length;
-
-    let command = messageSplit[0].toLowerCase();
-    let firstParam;
-    if (length > 1) firstParam = messageSplit[1].toLowerCase();
-    let secondParam;
-    if (length > 2) secondParam = messageSplit[2].toLowerCase();
-
-    return {
-      command,
-      firstParam,
-      secondParam,
-    };
-  }
-
-  /**
    * Parses given user input of time in digital format
    * @param time - in the format of HH:MM:SS entered by the user
    * @return time in seconds or null if invalid
@@ -191,7 +178,31 @@ const chatHandler = (function () {
     if (message === null || message == undefined) return;
     if (message === 'null' || message == 'undefined') return;
     message = message.replace(constants.channelStr, user.channel);
-    client.action(targetGlobal, message);
+    sendMessage(`/me ${message}`)
+  }
+
+  /**
+   * Sends message via StreamerBot action (importing download)
+   * @param {string} message 
+   */
+  async function sendMessage(message) {
+    // for debugging, use
+    // const response = await client.doAction(...)
+    await client.doAction(
+      streamerbot.sendMessageActionId,
+      {
+        message: message
+      }
+    )
+  }
+
+  /**
+   * Console logs when the timer connects to the channel
+   * @note taken from twitch documentation: https://dev.twitch.tv/docs/irc
+   */
+  function onConnect(data) {
+    console.log("Streamer.bot is connected");
+    if (isTesting) window.addEventListener('load', testRunner.runTests());
   }
 
   /**
@@ -199,16 +210,7 @@ const chatHandler = (function () {
    * @param {string} message
    */
   function chatCommand(message) {
-    client.say(`#${user.channel}`, message);
-  }
-
-  /**
-   * Console logs when the timer connects to the channel
-   * @note taken from twitch documentation: https://dev.twitch.tv/docs/irc
-   */
-  function onConnectedHandler(addr, port) {
-    console.log(`* Connected to ${addr}:${port}`);
-    if (isTesting) window.addEventListener('load', testRunner.runTests());
+    sendMessage(message);
   }
 
   module.chatItalicMessage = chatItalicMessage;
