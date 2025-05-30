@@ -1,4 +1,4 @@
-# Minimal Pomo Timer + Streamer.bot
+# Minimal Pomo Timer + Streamer.bot (Alpha)
 
 ## RythonDev
 
