@@ -48,6 +48,7 @@ let configs = (function () {
   const showHoursIf00 = false; // true: will show 00:mm:ss, false: will show mm:ss when hours is 0
 
   // Label Configuration
+  const sessionLabel = "Pomo";
   const workLabel = 'Work';
   const breakLabel = 'Break';
   const longBreakLabel = 'Break';
@@ -120,6 +121,7 @@ let configs = (function () {
     defaultPomoNumber,
     longBreakEvery,
     startingTime,
+    sessionLabel,
     workLabel,
     breakLabel,
     longBreakLabel,

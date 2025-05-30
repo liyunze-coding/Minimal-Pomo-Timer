@@ -254,7 +254,7 @@ const logic = (function () {
     let displayCounterGoal = cdCounterGoal / 2;
 
     controller.updateCycleCounter(
-      `Session ${displayCycleNum}/${displayCounterGoal}`
+      `${settings.sessionLabel} ${displayCycleNum}/${displayCounterGoal}`
     );
   }
 
