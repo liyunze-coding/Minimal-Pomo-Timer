@@ -50,7 +50,8 @@ For Streamer.bot do the following steps:
 2. Navigate to `Servers/Clients` > `Websocket Server`
 3. `Auto Start WebSocket Server` set to true.
 4. In the `configs.js` file, ensure that the Streamer.bot websocket settings are identical.
-5. If you need to edit Streamer.bot related code, navigate to `/js/streamerbot.js` directory.
+5. Refresh the browser source if chat commands such as `!timer start` don't work.
+6. If you need to edit Streamer.bot related code, navigate to `/js/streamerbot.js` directory.
 
 # How to use
 
