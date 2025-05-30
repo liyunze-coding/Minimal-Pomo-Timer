@@ -2,7 +2,7 @@ let configs = (function () {
   'use strict';
 
   // Authentication and channels
-  const channel = 'RythonDev'; // your channel
+  const channel = ''; // your channel
 
   // Streamer bot settings - required
   const address = "127.0.0.1";
