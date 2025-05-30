@@ -86,6 +86,7 @@ const logic = (function () {
     isStarting = false;
 
     controller.updateLabel(settings.workLabel);
+    streamerbot.workTimerStarted();
 
     if (responses.workMsg) chatHandler.chatItalicMessage(responses.workMsg);
 
@@ -146,18 +147,29 @@ const logic = (function () {
       controller.updateLabel(settings.workLabel);
       controller.playWorkSound();
 
+      // streamerbot work time actions
+      streamerbot.workTimerStarted();
+
       if (responses.workMsg) chatHandler.chatItalicMessage(responses.workMsg);
     } else {
       if (isLongBreak()) {
         currTime = settings.longBreakTime;
         controller.updateLabel(settings.longBreakLabel);
         controller.playLongBreakSound();
+
+        // streamerbot break time actions
+        streamerbot.breakTimerStarted();
+
         if (responses.longBreakMsg)
           chatHandler.chatItalicMessage(responses.longBreakMsg);
       } else {
         currTime = settings.breakTime;
         controller.updateLabel(settings.breakLabel);
         controller.playBreakSound();
+
+        // streamerbot break time actions
+        streamerbot.breakTimerStarted();
+
         if (responses.breakMsg)
           chatHandler.chatItalicMessage(responses.breakMsg);
       }
@@ -226,6 +238,8 @@ const logic = (function () {
     cdCounter = cdCounterGoal;
     updateCycleCounter();
 
+    streamerbot.finishedTimer();
+
     if (settings.noLastBreak) controller.playBreakSound();
 
     chatHandler.chatItalicMessage(responses.finishResponse);
@@ -240,7 +254,7 @@ const logic = (function () {
     let displayCounterGoal = cdCounterGoal / 2;
 
     controller.updateCycleCounter(
-      'Pomo ' + displayCycleNum + '/' + displayCounterGoal
+      `Session ${displayCycleNum}/${displayCounterGoal}`
     );
   }
 

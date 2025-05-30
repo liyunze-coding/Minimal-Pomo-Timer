@@ -1,6 +1,20 @@
-# Minimal Pomo Timer
+# Minimal Pomo Timer + Streamer.bot
 
-Pomodoro Twitch Overlay. I designed this for my co-working stream so that it is automatic and I don't need to set the timer every time. You customize the style, pomodoros and control it using chat commands on stream - shown below.
+## RythonDev
+
+I forked this repository to allow for better integrations with [Streamer.bot](https://streamer.bot/). 
+
+With this integration, you don't need to worry about oauth token management. You are also able to execute Streamer.bot actions such as changing scenes or changing stream category. 
+
+Currently, the code only supports Twitch, but can definitely be easily integrated into YouTube and other streaming services.
+
+Note that Streamer.bot is a Windows application, and may require workarounds when used on other operating systems.
+
+I also removed workCategory and playCategory, you can easily modify those in Streamer.bot actions.
+
+## MohFocus
+
+Pomodoro Twitch Widget. I designed this for my co-working stream so that it is automatic and I don't need to set the timer every time. You customize the style, pomodoros and control it using chat commands on stream - shown below.
 
 This works by installing it onto your PC rather than having it hosted online on streamlabs or streamelements since that would be lighter on the PC and for example sounds when the timer finishes are less likely to get affected when you have a slow laptop/PC (used to have a laptop before PC and suffered from this).
 
@@ -30,18 +44,13 @@ The file should look like this with comments on how to change the default config
 Channel: channel for which to connect the bot to<BR>
 username: username of the bot you which to have connected to this overlay, e.g. I have a separate bot called `moh_manager` for my channel that is connected to all the overlays.
 
-For oauth do the following steps:
+For Streamer.bot do the following steps:
 
-1. Use https://sarayalth.github.io/TwitchOAuthGenerator/
-2. Click on set default scopes
-3. Login
-4. Copy the token 
-5. Paste into configs
-oauth is a token that acts like a password that only allows the overlay to send messages on behalf of that account.
-
-workCategory, playCategory: These are null (unused) by default, but if you want to set them to valid Twitch categories,
-then the timer will automatically use the categoryCommand (defaults to !game) to set your category when the timer goes off.
-Useful if you forget to set it constantly like I do!
+1. Open Streamer.bot
+2. Navigate to `Servers/Clients` > `Websocket Server`
+3. `Auto Start WebSocket Server` set to true.
+4. In the `configs.js` file, ensure that the Streamer.bot websocket settings are identical.
+5. If you need to edit Streamer.bot related code, navigate to `/js/streamerbot.js` directory.
 
 # How to use
 

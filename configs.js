@@ -2,9 +2,14 @@ let configs = (function () {
   'use strict';
 
   // Authentication and channels
-  const channel = ''; // your channel
+  const channel = 'RythonDev'; // your channel
 
-  // Styling - required
+  // Streamer bot settings - required
+  const address = "127.0.0.1";
+  const port = 8080;
+  const endpoint = "/";
+
+  // Styling
   const height = '150px';
   const width = '373px';
   const backgroundColor = '#000000'; // hex only
@@ -30,9 +35,9 @@ let configs = (function () {
   const direction = 'row'; // row or column
 
   // Time Configuration
-  const workTime = 5400; // in seconds
-  const breakTime = 900; // in seconds
-  const longBreakTime = 900; // in seconds
+  const workTime = 90 * 60; // in seconds
+  const breakTime = 10 * 60; // in seconds
+  const longBreakTime = 15 * 60; // in seconds
   const longBreakEvery = 3; // long break every x pomos
   const defaultPomoNumber = 5;
   const workTimeRemind = 25;
@@ -55,7 +60,7 @@ let configs = (function () {
   const longBreakSound = 'breakSound.riff';
 
   // Responses
-  const workMsg = "It's work time 📏 📘"; // these are 7tv emotes
+  const workMsg = "It's work time 📏 📘"; // works with 7tv emotes
   const breakMsg = 'Time for a break! 🎶 🎮'; // works with emojis
   const longBreakMsg = 'Time for a long break! 👀';
   const workRemindMsg = 'Time to get ready for focus @{channel} 💻'; // can be customized to anything
@@ -77,17 +82,18 @@ let configs = (function () {
   const roleID = '1050921202853617724'; // role id to ping, can be obtained by right clicking on the role (ensure to have developer mode on)
   const content = 'Stream is going on break! {role}'; // message to send
 
-  // work/play category options
-  const workCategory = ''; // e.g. "Co-working & Studying"
-  const playCategory = ''; // e.g. "Hearthstone"
-  const categoryCommand = '!game';
-
   // Please don't edit any of the lines below
   const runTests = false;
 
   const user = {
     channel,
   };
+
+  const sb = {
+    address,
+    port,
+    endpoint
+  }
 
   const responses = {
     workMsg,
@@ -127,9 +133,6 @@ let configs = (function () {
     runTests,
     showHours,
     showHoursIf00,
-    workCategory,
-    playCategory,
-    categoryCommand,
   };
 
   const styles = {
@@ -163,6 +166,7 @@ let configs = (function () {
 
   let module = {};
 
+  module.sb = sb;
   module.user = user;
   module.styles = styles;
   module.responses = responses;

@@ -10,11 +10,10 @@ const chatHandler = (function () {
   const client = streamerbot.client;
 
   client.on('Twitch.ChatMessage', onTwitchChatHandler);
+  client.on('WebsocketClient.Open', onConnect);
 
   function onTwitchChatHandler(data) {
     const payload = data.data;
-
-    console.log(payload);
 
 		const command = payload.message.message.split(" ")[0];
 		const chatterName = payload.message.displayName;
@@ -178,22 +177,7 @@ const chatHandler = (function () {
     if (message === null || message == undefined) return;
     if (message === 'null' || message == 'undefined') return;
     message = message.replace(constants.channelStr, user.channel);
-    sendMessage(`/me ${message}`)
-  }
-
-  /**
-   * Sends message via StreamerBot action (importing download)
-   * @param {string} message 
-   */
-  async function sendMessage(message) {
-    // for debugging, use
-    // const response = await client.doAction(...)
-    await client.doAction(
-      streamerbot.sendMessageActionId,
-      {
-        message: message
-      }
-    )
+    streamerbot.sendMessage(`/me ${message}`)
   }
 
   /**
@@ -210,7 +194,7 @@ const chatHandler = (function () {
    * @param {string} message
    */
   function chatCommand(message) {
-    sendMessage(message);
+    streamerbot.sendMessage(message);
   }
 
   module.chatItalicMessage = chatItalicMessage;
