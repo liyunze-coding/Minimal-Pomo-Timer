@@ -6,7 +6,7 @@ let configs = (function () {
 
   // Streamer bot settings - required
   const address = "127.0.0.1";
-  const port = 8080;
+  const port = 5050;
   const endpoint = "/";
 
   // Styling
@@ -43,6 +43,8 @@ let configs = (function () {
   const workTimeRemind = 25;
   const sendWorkTimeRemind = true;
   const startingTime = 300;
+  const runAd = 110; // run an ad xx seconds before break time starts
+  const runAdBeforeBreak = false;
   const noLastBreak = true;
   const showHours = false; // true: time in hh:mm:ss; false: time in mm:ss always
   const showHoursIf00 = false; // true: will show 00:mm:ss, false: will show mm:ss when hours is 0
@@ -80,7 +82,7 @@ let configs = (function () {
   // Discord notifications
   const sendDiscord = false; // true or false
   const webHookURL = ''; // make sure to keep the '' around the url
-  const roleID = '1050921202853617724'; // role id to ping, can be obtained by right clicking on the role (ensure to have developer mode on)
+  const roleID = ''; // role id to ping, can be obtained by right clicking on the role (ensure to have developer mode on)
   const content = 'Stream is going on break! {role}'; // message to send
 
   // Please don't edit any of the lines below
@@ -121,6 +123,8 @@ let configs = (function () {
     defaultPomoNumber,
     longBreakEvery,
     startingTime,
+    runAd,
+    runAdBeforeBreak,
     sessionLabel,
     workLabel,
     breakLabel,

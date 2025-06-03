@@ -119,6 +119,13 @@ const logic = (function () {
         chatHandler.chatItalicMessage(responses.workRemindMsg);
       }
 
+      if (isWorkTime() &&
+        currTime === settings.runAd &&
+        settings.runAdBeforeBreak
+      ) {
+        streamerbot.runAd();
+      }
+
       setTimeout(timer, 1000); // Recursive call
     } else {
       if (cdCounter < cdCounterGoal && !settings.noLastBreak) {

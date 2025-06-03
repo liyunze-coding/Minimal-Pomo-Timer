@@ -38,11 +38,18 @@ const streamerbot = (function(){
     )
 	}
 
+  async function runAd() {
+    await client.doAction(
+      "b18f768c-3747-462d-acca-2d7c6728e3f5"
+    )
+  }
+
 	return {
 		client,
 		sendMessage,
 		workTimerStarted,
 		breakTimerStarted,
-		finishedTimer
+		finishedTimer,
+    runAd
 	}
 })();
