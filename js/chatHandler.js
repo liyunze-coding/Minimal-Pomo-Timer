@@ -155,9 +155,9 @@ const chatHandler = (function () {
       const match = time.match(/^((\d+):)?((\d+):)?(\d+)$/);
 
       if (match) {
-        hours = parseInt(match[2], 10) * 3600;
-        minutes = parseInt(match[4], 10) * 60;
-        seconds = parseInt(match[5], 10);
+        hours = parseInt(match[2] || "0", 10) * 3600;
+        minutes = parseInt(match[4] || "0", 10) * 60;
+        seconds = parseInt(match[5] || "0", 10);
       }
     }
 
