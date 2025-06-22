@@ -134,13 +134,13 @@ const chatHandler = (function () {
 
   /**
    * Parses given user input of time in digital format
-   * @param time - in the format of HH:MM:SS entered by the user
+   * @param time - in the format of HH:MM:SS or 1h2m3s entered by the user
    * @return time in seconds or null if invalid
    */
   function parseTime(time) {
     let hours = 0, minutes = 0, seconds = 0;
 
-    const hmsMatch = time.match(/(\d+)h|(\d+)m|(\d+)s/i);
+    const hmsMatch = time.match(/(?:(\d+)h)?(?:(\d+)m)?(?:(\d+)s)?/i);
     if (hmsMatch) {
       hours = parseInt(hmsMatch[1] || 0);
       minutes = parseInt(hmsMatch[2] || 0);
