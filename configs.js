@@ -76,8 +76,8 @@ let configs = (function () {
   const cycleWrong = 'Cycle cannot be more than goal!';
   const goalWrong = 'Goal cannot be less than cycle!';
   const finishResponse = 'Good work today everyone 💪🏽';
-  const alreadyStarting =
-    'The stream is already starting or the timer is running!';
+  const alreadyStarting = 'The stream is already starting or the timer is running!';
+  const eta = '⏰ Timer will end at {time}';
 
   // Discord notifications
   const sendDiscord = false; // true or false
@@ -113,6 +113,7 @@ let configs = (function () {
     goalWrong,
     finishResponse,
     alreadyStarting,
+    eta,
   };
 
   const settings = {
