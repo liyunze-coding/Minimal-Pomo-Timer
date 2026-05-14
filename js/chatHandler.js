@@ -9,72 +9,44 @@ const chatHandler = (function () {
 
   const client = streamerbot.client;
 
-  client.on('Twitch.ChatMessage', onTwitchChatHandler);
+  // client.on('Twitch.ChatMessage', onTwitchChatHandler);
+  client.on("Command.Triggered", onCommandTriggered);
   client.on('WebsocketClient.Open', onConnect);
 
-  function onTwitchChatHandler(data) {
+  function onCommandTriggered(data) {
     const payload = data.data;
 
-		const command = payload.message.message.split(" ")[0];
-		const chatterName = payload.message.displayName;
-		const message = payload.message.message.split(" ").slice(1).join(" ");
+    const command = payload.command;
+
+    const message = payload.message;
 
     const firstParam = message.split(" ")[0];
     const secondParam = message.split(" ")[1];
 
-    // get is broadcaster (streamer) or moderator
-		const badges = payload.message.badges;
-
-    let isBroadCaster = false;
-    let isMod = false;
-
-		badges.forEach((badge) => {
-			if (badge.name === "broadcaster") {
-				isBroadCaster = true;
-			} else if (badge.name === "moderator") {
-				isMod = true;
-			}
-		});
-
     const msg = {
       command,
       firstParam,
-      secondParam
+      secondParam,
     };
 
-    const context = {
-      isMod,
-      isBroadCaster,
-      chatterName
-    }
-
-    console.log(msg, context);
-
-    messageHandler(context, msg);
+    messageHandler(msg);
   }
 
   /**
    * Messages from chat pass through this function to detect when the timer command is used.
    * @summary Only executes the given commands if the user is a mod or the broadcaster
    * @param target - the channel were the message came from
-   * @param {JSON} context - Additional information about the message and its sender
    * @param {String} msg - The message sent in chat
    * @note This function was taken from twitch documentation: https://dev.twitch.tv/docs/irc
    */
-  function messageHandler(context, msg) {
+  function messageHandler(msg) {
     if (!msg) return;
 
     const { command, firstParam, secondParam } = msg;
 
     if (command !== '!timer' && command !== '!start') return;
 
-    const { isMod, isBroadCaster, chatterName } = context;
-    console.log(isBroadCaster, isMod, chatterName);
-
-    if (!(isMod || isBroadCaster)) {
-      chatItalicMessage(responses.notMod, chatterName);
-      return;
-    }
+    // using streamerbot, commands are restricted to Mods only
 
     if (command === '!start') {
       let startingSuccess = logic.starting();
@@ -177,7 +149,7 @@ const chatHandler = (function () {
     if (message === null || message == undefined) return;
     if (message === 'null' || message == 'undefined') return;
     message = message.replace(constants.channelStr, user.channel);
-    streamerbot.sendMessage(`/me ${message}`)
+    streamerbot.sendMessage(`/me ${message}`);
   }
 
   /**
@@ -185,7 +157,7 @@ const chatHandler = (function () {
    * @note taken from twitch documentation: https://dev.twitch.tv/docs/irc
    */
   function onConnect(data) {
-    console.log("Streamer.bot is connected");
+    console.log('Streamer.bot is connected');
     if (isTesting) window.addEventListener('load', testRunner.runTests());
   }
 
